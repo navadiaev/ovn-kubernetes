@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"log"
 	"net"
-	"os"
+	"os/exec"
 	"path"
 	"path/filepath"
 	"regexp"
@@ -407,33 +407,42 @@ func GetVfNetdevName(handle *PfNetdevHandle, vf *VfObj) string {
 // GetVfIndexByPciAddress gets a VF PCI address (e.g '0000:03:00.4') and
 // returns the correlate VF index.
 func GetVfIndexByPciAddress(vfPciAddress string) (int, error) {
-	vfPath := filepath.Join(PciSysDir, vfPciAddress, "physfn", "virtfn*")
-	matches, err := filepath.Glob(vfPath)
-	if err != nil {
-		return -1, err
+	aux := strings.Split(vfPciAddress, ".")
+
+	// dirty hack
+	if aux[1] == "00" {
+		return 0, nil
+	} else if aux[1] == "1" {
+		return 1, nil
+	} else if aux[1] == "2" {
+		return 2, nil
+	} else if aux[1] == "3" {
+		return 3, nil
+	} else if aux[1] == "4" {
+		return 4, nil
+	} else if aux[1] == "5" {
+		return 5, nil
+	} else if aux[1] == "6" {
+		return 6, nil
+	} else {
+		return -1, fmt.Errorf("naftaly: GetVfIndexByPciAddress | aux: %s", aux)
 	}
-	for _, match := range matches {
-		tmp, err := os.Readlink(match)
-		if err != nil {
-			continue
-		}
-		if strings.Contains(tmp, vfPciAddress) {
-			result := virtFnRe.FindStringSubmatch(match)
-			vfIndex, err := strconv.Atoi(result[1])
-			if err != nil {
-				continue
-			}
-			return vfIndex, nil
-		}
-	}
-	return -1, fmt.Errorf("vf index for %s not found", vfPciAddress)
+
 }
 
 // GetNetDevicesFromPci gets a PCI address (e.g '0000:03:00.1') and
 // returns the correlate list of netdevices
 func GetNetDevicesFromPci(pciAddress string) ([]string, error) {
-	pciDir := filepath.Join(PciSysDir, pciAddress, "net")
-	_, err := utilfs.Fs.Stat(pciDir)
+	cmd := exec.Command("/usr/bin/find", PciSysDir+"/"+pciAddress+"/", "-name", "net")
+	output, err := cmd.Output()
+	if err != nil {
+		return nil, fmt.Errorf("cannot get a correct path %v %v", string(output), err)
+	}
+	pciDir := strings.TrimSpace(string(output))
+
+	//pciDir := filepath.Join(PciSysDir, pciAddress, postfix)
+	// _, err = utilfs.Fs.Stat(pciDir)
+	_, err = utilfs.Fs.Stat(pciDir)
 	if err != nil {
 		return nil, fmt.Errorf("cannot get a network device with pci address %v %v", pciAddress, err)
 	}

@@ -191,7 +191,8 @@ func (g *gateway) Start(stopChan <-chan struct{}, wg *sync.WaitGroup) {
 
 	if g.openflowManager != nil {
 		klog.Info("Spawning Conntrack Rule Check Thread")
-		g.openflowManager.Run(stopChan, wg)
+		// Naftaly: in dpu mode this causes the DPU to lose connectivity
+		//g.openflowManager.Run(stopChan, wg)
 	}
 }
 
