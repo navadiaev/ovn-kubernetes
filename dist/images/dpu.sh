@@ -10,7 +10,7 @@ export DPU_IP="10.5.210.21"
 # for external traffic to go through a different gateway than the default,
 # add to the below: --gateway-nexthop=<next-hop-ip>
 #export OVN_GATEWAY_OPTS='--gateway-interface=enp1s0f1'
-export OVNKUBE_NODE_MGMT_PORT_NETDEV=enP2p15s0v0 # The representor  of the VF that used for --ovnkube-node-mgmt-port-netdev in deployment on host
+export OVNKUBE_NODE_MGMT_PORT_NETDEV=enP2p15s0v1 # The representor  of the VF that used for --ovnkube-node-mgmt-port-netdev in deployment on host
 export OVN_DISABLE_PKT_MTU_CHECK=true
  
 # Assume still in dist/images
