@@ -220,7 +220,7 @@ func GetVfRepresentorDPU(pfID, vfIndex string) (string, error) {
 func GetRepresentorPortFlavour(netdev string) (PortFlavour, error) {
 
 	// Dirty hack
-	if netdev == "eth0" {
+	if netdev == "enP2p3s0" {
 		fmt.Errorf("naftaly: true")
 		return PORT_FLAVOUR_PCI_PF, nil
 	}
