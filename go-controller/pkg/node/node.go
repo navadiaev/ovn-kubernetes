@@ -28,7 +28,6 @@ import (
 	"github.com/ovn-org/ovn-kubernetes/go-controller/pkg/informer"
 	"github.com/ovn-org/ovn-kubernetes/go-controller/pkg/kube"
 	"github.com/ovn-org/ovn-kubernetes/go-controller/pkg/node/controllers/upgrade"
-	"github.com/ovn-org/ovn-kubernetes/go-controller/pkg/ovn/healthcheck"
 	"github.com/ovn-org/ovn-kubernetes/go-controller/pkg/types"
 	"github.com/ovn-org/ovn-kubernetes/go-controller/pkg/util"
 	"github.com/vishvananda/netlink"
@@ -602,16 +601,18 @@ func (n *OvnNode) startEgressIPHealthCheckingServer(wg *sync.WaitGroup, mgmtPort
 		//return fmt.Errorf("unable to start health checking server: no mgmt ip")
 	}
 
-	healthServer, err := healthcheck.NewEgressIPHealthServer(nodeMgmtIP, healthCheckPort)
-	if err != nil {
-		return fmt.Errorf("unable to allocate health checking server: %v", err)
-	}
+	/*
+		healthServer, err := healthcheck.NewEgressIPHealthServer(nodeMgmtIP, healthCheckPort)
+		if err != nil {
+			return fmt.Errorf("unable to allocate health checking server: %v", err)
+		}
 
-	wg.Add(1)
-	go func() {
-		defer wg.Done()
-		healthServer.Run(n.stopChan)
-	}()
+		wg.Add(1)
+		go func() {
+			defer wg.Done()
+			healthServer.Run(n.stopChan)
+		}()
+	*/
 	return nil
 }
 
