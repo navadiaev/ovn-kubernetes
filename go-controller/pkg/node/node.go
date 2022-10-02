@@ -599,7 +599,7 @@ func (n *OvnNode) startEgressIPHealthCheckingServer(wg *sync.WaitGroup, mgmtPort
 			return fmt.Errorf("failed start health checking server due to unsettled IPv6: %w", err)
 		}
 	} else {
-		return fmt.Errorf("unable to start health checking server: no mgmt ip")
+		//return fmt.Errorf("unable to start health checking server: no mgmt ip")
 	}
 
 	healthServer, err := healthcheck.NewEgressIPHealthServer(nodeMgmtIP, healthCheckPort)
