@@ -565,10 +565,11 @@ func (n *OvnNode) Start(ctx context.Context, wg *sync.WaitGroup) error {
 			return err
 		}
 
-		// Write CNI config file if it doesn't already exist
-		if err := config.WriteCNIConfig(); err != nil {
-			return err
-		}
+	}
+
+	// Write CNI config file if it doesn't already exist
+	if err := config.WriteCNIConfig(); err != nil {
+		return err
 	}
 
 	// Start the health checking server used by egressip, if EgressIPNodeHealthCheckPort is specified
